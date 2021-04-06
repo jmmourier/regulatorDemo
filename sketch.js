@@ -10,6 +10,11 @@ var maxRotation = 10;
 var targetX = 200;
 var targetY = 200;
 
+var historySize = 500;
+var historyPositionX = [];
+var historyPositionY = [];
+var historyOri = [];
+
 function setup() {
   caneva = createCanvas(600, 400);
   caneva.mouseClicked(updateTaget);
@@ -22,12 +27,22 @@ function draw() {
   
   updatePosition();
   drawArrow();
+  drawArrowHist();
   
   circle(targetX, targetY, 20);
   processSpeed();
 }
 
 function updatePosition(){
+  if(historyPositionX.length > historySize) {
+    historyPositionX.shift();
+    historyPositionY.shift();
+    historyOri.shift();
+  }
+  historyPositionX.push(positionX);
+  historyPositionY.push(positionY);
+  historyOri.push(Orientation);
+  
   Orientation = Orientation + rotation * deltaTime/1000;
   positionX = positionX + speed*cos(Orientation) * deltaTime/1000;
   positionY = positionY + speed*sin(Orientation) * deltaTime/1000;
@@ -44,6 +59,16 @@ function drawArrow(){
   triangle(-5, -15, 0, 0, 5, -15);
   rotate(-Orientation + 90);  
   translate(-positionX, -positionY);
+}
+
+function drawArrowHist(){
+  for (let i = 0; i < historyPositionX.length -1; i++) {
+    stroke(255);
+    line(historyPositionX[i],
+         historyPositionY[i],
+         historyPositionX[i+1],
+         historyPositionY[i+1]);
+  }
 }
 
 function processSpeed(){
