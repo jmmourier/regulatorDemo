@@ -5,7 +5,7 @@ var Orientation = 0;
 var speed = 0;
 var maxSpeed = 30;
 var rotation = 0; // deg /sec
-var maxRotation = 10;
+var maxRotation = 20;
 
 var targetX = 200;
 var targetY = 200;
@@ -29,8 +29,20 @@ function draw() {
   drawArrow();
   drawArrowHist();
   
-  circle(targetX, targetY, 20);
+  circle(targetX, targetY, 10);
   processSpeed();
+  
+  printDebugText();
+
+}
+
+function printDebugText(){
+  textSize(19);
+  text(new String(positionX).substring(0,3), 10, 350);
+  text(new String(positionY).substring(0,3), 60, 350);
+  text(targetX, 110, 350);
+  text(targetY, 160, 350);
+  fill(255);
 }
 
 function updatePosition(){
@@ -57,6 +69,9 @@ function drawArrow(){
   translate(positionX, positionY);
   rotate(Orientation - 90);  
   triangle(-5, -15, 0, 0, 5, -15);
+  stroke('red');
+  line(0,0,0,100);
+  stroke(255);
   rotate(-Orientation + 90);  
   translate(-positionX, -positionY);
 }
@@ -74,9 +89,16 @@ function drawArrowHist(){
 function processSpeed(){
   distance = calculateDistance();
   
+  textSize(19);
+  text(new String(positionX).substring(0,3), 10, 350);
+  text(new String(positionY).substring(0,3), 60, 350);
+  text(targetX, 110, 350);
+  text(targetY, 160, 350);
+  fill(255);
+  
   // hasPositionBeenReached ---
   if(abs(distance) < 5 ){
-    print('destination reached');
+    text('Destination reached', 10, 375);
     rotation  = 0;
     speed = 0;
     return;
@@ -93,11 +115,11 @@ function processSpeed(){
   
   // Speed regulation ---
   if(abs(errorCap)>15) {
-    print('rotation only');
+    text('Aligning, cap error : ' + errorCap, 10, 375);
     speed = 0;
   }
   else {
-    print('rotation + speed');
+    text('Moving, distance : ' + distance, 10, 375);
     speed = distance;
     if(speed > maxSpeed) speed = maxSpeed;
     print('The distance is ' + distance);
