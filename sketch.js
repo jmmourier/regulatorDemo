@@ -109,6 +109,10 @@ function processSpeed(){
   print('The cap is ' + cap);
   errorCap = cap - Orientation;
   
+  if(errorCap > 180) errorCap = errorCap - 360;
+  if(errorCap < -180) errorCap = errorCap + 360;
+  
+  
   rotation = errorCap;
   if(rotation > maxRotation) rotation = maxRotation;
   if(rotation < -maxRotation) rotation = -maxRotation;
